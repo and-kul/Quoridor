@@ -22,8 +22,8 @@ namespace Tests
 
             c = new Cell[10, 10];
             for (var x = 1; x <= 9; ++x)
-            for (var y = 1; y <= 9; ++y)
-                c[x, y] = new Cell(x, y);
+                for (var y = 1; y <= 9; ++y)
+                    c[x, y] = new Cell(x, y);
         }
 
 
@@ -66,7 +66,6 @@ namespace Tests
             var segmentE = new WallSegment(c[3, 5], c[3, 4]);
 
             Assert.That(WallSegment.AreAdjacent(segmentD, segmentE));
-            
         }
     }
 }

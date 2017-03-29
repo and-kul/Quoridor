@@ -52,6 +52,34 @@ namespace Quoridor
             Array.Sort(Cells);
         }
 
+        public Wall(Cell[] cells, Orientation orientation)
+        {
+            if (cells == null) throw new ArgumentNullException(nameof(cells));
+
+            if (cells.Length != 4) throw new ArgumentException("There must be exactly 4 cells in the array");
+
+            Cells = new Cell[4];
+            Array.Copy(cells, Cells, 4);
+            Array.Sort(Cells);
+
+            Orientation = orientation;
+
+            if (Orientation == Orientation.Vertical)
+            {
+                SegmentA = new WallSegment(Cells[0], Cells[2]);
+                SegmentB = new WallSegment(Cells[1], Cells[3]);
+            }
+            else
+            {
+                SegmentA = new WallSegment(Cells[0], Cells[1]);
+                SegmentB = new WallSegment(Cells[2], Cells[3]);
+            }
+            
+
+        }
+
+
+
         
 
 

@@ -1,12 +1,23 @@
-﻿namespace Quoridor
+﻿using System;
+
+namespace Quoridor
 {
     
-    public class Player
+    public abstract class Player
     {
-        public string Name;
+        public readonly string Name;
+
+        public int Id;
         public int TargetY;
+
         public Cell CurrentPosition;
         public int WallsRemaining;
+
+        protected Player(string name)
+        {
+            Name = name;
+        }
+        
 
         private Game game;
 
