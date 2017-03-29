@@ -21,9 +21,7 @@ namespace Quoridor
             
             if (cell1 > cell2)
             {
-                var tmp = cell1;
-                cell1 = cell2;
-                cell2 = tmp;
+                Helper.Swap(ref cell1, ref cell2);
             }
             
             Cell1 = cell1;

@@ -14,6 +14,7 @@ namespace Quoridor
         {
             
 
+
             Console.ReadLine();
         }
     }

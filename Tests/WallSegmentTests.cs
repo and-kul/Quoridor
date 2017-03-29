@@ -42,7 +42,7 @@ namespace Tests
 
 
         [Test]
-        public void WallSegmentEquality()
+        public void WallSegmentsEquality()
         {
             var c_2_5_Copy = new Cell(2, 5);
             var c_3_5_Copy = new Cell(3, 5);
