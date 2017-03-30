@@ -9,9 +9,10 @@ namespace Quoridor
 
         public int Id;
         public int TargetY;
-
         public Cell CurrentPosition;
         public int WallsRemaining;
+
+        public Game Game;
 
         protected Player(string name)
         {
@@ -19,7 +20,7 @@ namespace Quoridor
         }
         
 
-        private Game game;
+        
 
     }
 }
