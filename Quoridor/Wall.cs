@@ -16,7 +16,7 @@ namespace Quoridor
             if (segmentA == null) throw new ArgumentNullException(nameof(segmentA));
             if (segmentB == null) throw new ArgumentNullException(nameof(segmentB));
 
-            if (!WallSegment.AreAdjacent(segmentA,segmentB))
+            if (!WallSegment.AreAdjacent(segmentA, segmentB))
                 throw new ArgumentException("Wall segments are not adjacent");
 
             Orientation = segmentA.Orientation;
@@ -35,11 +35,11 @@ namespace Quoridor
                     Helper.Swap(ref segmentA, ref segmentB);
                 }
             }
-            
+
 
             SegmentA = segmentA;
             SegmentB = segmentB;
-            
+
 
             Cells = new[]
             {
@@ -74,13 +74,78 @@ namespace Quoridor
                 SegmentA = new WallSegment(Cells[0], Cells[1]);
                 SegmentB = new WallSegment(Cells[2], Cells[3]);
             }
-            
+        }
+
+        public static bool IsCorrectWallDescription(string wallDescription)
+        {
+            if (wallDescription == null) return false;
+            if (wallDescription.Length != 3) return false;
+
+            if (wallDescription[0] < '1' || wallDescription[0] > '8') return false;
+            if (wallDescription[1] < '1' || wallDescription[1] > '8') return false;
+
+            var orientation = wallDescription[2];
+
+            if (orientation != 'v' && orientation != 'h') return false;
+
+            return true;
 
         }
 
 
 
-        
+        /// <summary>
+        /// Creates Wall from short string description
+        /// </summary>
+        /// 
+        /// <param name="wallDescription">
+        /// 3-character description in the format "xyO",
+        /// where 'x' and 'y' - coordinates of the lower left cell out of 4,
+        /// and 'O' is a wall orientation (can be either 'v' or 'h')
+        /// </param>
+        public Wall(String wallDescription)
+        {
+            if (!IsCorrectWallDescription(wallDescription))
+                throw new ArgumentException("Incorrect wall description");
+            
+            var x = int.Parse(wallDescription.Substring(0, 1));
+            var y = int.Parse(wallDescription.Substring(1, 1));
+
+            var dx = new[] { 0, 0, 1, 1 };
+            var dy = new[] { 0, 1, 0, 1 };
+
+            var cellsList = new List<Cell>();
+            for (var i = 0; i < 4; ++i)
+                cellsList.Add(new Cell(x + dx[i], y + dy[i]));
+
+            Cells = cellsList.ToArray();
+            
+
+            switch (wallDescription[2])
+            {
+                case 'v':
+                    Orientation = Orientation.Vertical;
+                    break;
+                case 'h':
+                    Orientation = Orientation.Horizontal;
+                    break;
+                default:
+                    Orientation = Orientation.Unknown;
+                    break;
+            }
+
+            if (Orientation == Orientation.Vertical)
+            {
+                SegmentA = new WallSegment(Cells[0], Cells[2]);
+                SegmentB = new WallSegment(Cells[1], Cells[3]);
+            }
+            else
+            {
+                SegmentA = new WallSegment(Cells[0], Cells[1]);
+                SegmentB = new WallSegment(Cells[2], Cells[3]);
+            }
+
+        }
 
 
         public bool DoesIntersect(Wall other)
@@ -132,7 +197,7 @@ namespace Quoridor
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            
+
             return Equals((Wall) obj);
         }
 
@@ -146,8 +211,8 @@ namespace Quoridor
                     hashCode = (hashCode * 401) ^ cell.GetHashCode();
                 }
 
-                hashCode = (hashCode * 401) ^ (int)Orientation;
-                
+                hashCode = (hashCode * 401) ^ (int) Orientation;
+
                 //var hashCode = SegmentA.GetHashCode();
                 //hashCode = (hashCode * 397) ^ SegmentB.GetHashCode();
                 //hashCode = (hashCode * 397) ^ (int)Orientation;

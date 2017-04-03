@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using Quoridor;
 
 namespace Tests
@@ -118,5 +119,38 @@ namespace Tests
             Assert.That(wall_D_E.SegmentB.Equals(wall_D_E_Cells.SegmentB));
             
         }
+
+        [Test]
+        public void WallDescriptionTest()
+        {
+            var correctDescriptions = new[]
+            {
+                "11v", "11h", "18v", "18h", "81v", "81h", "88v", "88h", "55h", "55v"
+            };
+
+            var incorrectDescriptions = new[]
+            {
+                "", "11V", "11H", "01v", "91v", "19h", "10h", "2 3 h", "abc"
+            };
+
+            Assert.That(correctDescriptions.All(Wall.IsCorrectWallDescription));
+
+            Assert.That(incorrectDescriptions.Any(Wall.IsCorrectWallDescription), Is.False);
+        }
+
+        [Test]
+        public void WallsFromStringDescription()
+        {
+            var wall_A_B_From_String = new Wall("24v");
+            var wall_B_C_From_String = new Wall("23v");
+            var wall_D_E_From_String = new Wall("24h");
+            
+            Assert.That(wall_A_B_From_String.Equals(wall_A_B));
+            Assert.That(wall_B_C_From_String.Equals(wall_B_C));
+            Assert.That(wall_D_E_From_String.Equals(wall_D_E));
+            
+        }
+
+
     }
 }
