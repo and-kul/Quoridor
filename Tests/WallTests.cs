@@ -77,6 +77,25 @@ namespace Tests
         }
 
         [Test]
+        public void Get4IntersectedWallsTest()
+        {
+            var initWall = new Wall(new[] {c[2, 4], c[2, 5], c[3, 5], c[3, 4]}, Orientation.Vertical);
+            var upperWall = new Wall(new[] { c[2, 6], c[2, 5], c[3, 5], c[3, 6] }, Orientation.Vertical);
+            var lowerWall = new Wall(new[] { c[2, 4], c[2, 3], c[3, 3], c[3, 4] }, Orientation.Vertical);
+            var turnedWall = new Wall(new[] { c[2, 4], c[2, 5], c[3, 5], c[3, 4] }, Orientation.Horizontal);
+
+            Assert.That(initWall.Get4IntersectedWalls(), Is.EquivalentTo(new [] {initWall, upperWall, lowerWall, turnedWall}));
+
+            initWall = new Wall(new[] { c[2, 4], c[2, 5], c[3, 5], c[3, 4] }, Orientation.Horizontal);
+            var leftWall = new Wall(new[] { c[2, 4], c[2, 5], c[1, 5], c[1, 4] }, Orientation.Horizontal);
+            var rightWall = new Wall(new[] { c[4, 4], c[4, 5], c[3, 5], c[3, 4] }, Orientation.Horizontal);
+            turnedWall = new Wall(new[] { c[2, 4], c[2, 5], c[3, 5], c[3, 4] }, Orientation.Vertical);
+
+            Assert.That(initWall.Get4IntersectedWalls(), Is.EquivalentTo(new[] { initWall, leftWall, rightWall, turnedWall }));
+        }
+
+
+        [Test]
         public void WallsEquality()
         {
             Assert.That(wall_A_B.Equals(wall_A_B_Copy));
@@ -102,13 +121,13 @@ namespace Tests
         public void ConstructorFromCells()
         {
             var wall_A_B_Cells = new Wall(new[] {c[2, 4], c[3, 5], c[3, 4], c[2, 5]}, Orientation.Vertical);
-            var wall_B_C_Cells = new Wall(new[] { c[2, 4], c[3, 4], c[3, 3], c[2, 3] }, Orientation.Vertical);
-            var wall_D_E_Cells = new Wall(new[] { c[2, 4], c[2, 5], c[3, 4], c[3, 5] }, Orientation.Horizontal);
+            var wall_B_C_Cells = new Wall(new[] {c[2, 4], c[3, 4], c[3, 3], c[2, 3]}, Orientation.Vertical);
+            var wall_D_E_Cells = new Wall(new[] {c[2, 4], c[2, 5], c[3, 4], c[3, 5]}, Orientation.Horizontal);
 
             Assert.That(wall_A_B.Equals(wall_A_B_Cells));
             Assert.That(wall_B_C.Equals(wall_B_C_Cells));
             Assert.That(wall_D_E.Equals(wall_D_E_Cells));
-            
+
             Assert.That(wall_A_B.SegmentA.Equals(wall_A_B_Cells.SegmentA));
             Assert.That(wall_A_B.SegmentB.Equals(wall_A_B_Cells.SegmentB));
 
@@ -117,7 +136,6 @@ namespace Tests
 
             Assert.That(wall_D_E.SegmentA.Equals(wall_D_E_Cells.SegmentA));
             Assert.That(wall_D_E.SegmentB.Equals(wall_D_E_Cells.SegmentB));
-            
         }
 
         [Test]
@@ -144,13 +162,10 @@ namespace Tests
             var wall_A_B_From_String = new Wall("24v");
             var wall_B_C_From_String = new Wall("23v");
             var wall_D_E_From_String = new Wall("24h");
-            
+
             Assert.That(wall_A_B_From_String.Equals(wall_A_B));
             Assert.That(wall_B_C_From_String.Equals(wall_B_C));
             Assert.That(wall_D_E_From_String.Equals(wall_D_E));
-            
         }
-
-
     }
 }

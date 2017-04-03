@@ -30,6 +30,11 @@ namespace Quoridor
             return sameX && consecutiveY || sameY && consecutiveX;
         }
 
+        public static Cell operator +(Cell cell, Vector vector)
+        {
+            return new Cell(cell.X + vector.X, cell.Y + vector.Y);
+        }
+
 
 
         public int CompareTo(Cell other)
@@ -59,6 +64,17 @@ namespace Quoridor
         public static bool operator >=(Cell left, Cell right)
         {
             return Comparer<Cell>.Default.Compare(left, right) >= 0;
+        }
+
+
+        public static bool operator ==(Cell left, Cell right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(Cell left, Cell right)
+        {
+            return !Equals(left, right);
         }
 
         public bool Equals(Cell other)

@@ -147,6 +147,45 @@ namespace Quoridor
 
         }
 
+        public Wall[] Get4IntersectedWalls()
+        {
+            var result = new List<Wall>();
+            result.Add(this);
+
+            if (Orientation == Orientation.Vertical)
+            {
+                var up = new Vector(0, 1);
+                var upperWall = new Wall(Cells.Select(cell => cell + up).ToArray(), Orientation.Vertical);
+
+                var down = new Vector(0, -1);
+                var lowerWall = new Wall(Cells.Select(cell => cell + down).ToArray(), Orientation.Vertical);
+
+                result.Add(upperWall);
+                result.Add(lowerWall);
+
+                var turnedWall = new Wall(Cells, Orientation.Horizontal);
+                result.Add(turnedWall);
+            }
+            else
+            {
+                var left = new Vector(-1, 0);
+                var leftWall = new Wall(Cells.Select(cell => cell + left).ToArray(), Orientation.Horizontal);
+
+                var right = new Vector(1, 0);
+                var rightWall = new Wall(Cells.Select(cell => cell + right).ToArray(), Orientation.Horizontal);
+
+                result.Add(leftWall);
+                result.Add(rightWall);
+
+                var turnedWall = new Wall(Cells, Orientation.Vertical);
+                result.Add(turnedWall);
+            }
+
+            return result.ToArray();
+        }
+
+
+
 
         public bool DoesIntersect(Wall other)
         {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Quoridor
@@ -6,9 +7,9 @@ namespace Quoridor
     public class Game
     {
         public Cell[,] Board;
-        public HashSet<Wall> wallsOnBoard;
-        private HashSet<Wall> possibleWalls;
-        private Player[] players;
+        public HashSet<Wall> WallsOnBoard;
+        public HashSet<Wall> PossibleWalls;
+        public Player[] Players;
         public Dictionary<Cell, List<Cell>> Neighbors;
 
         
@@ -66,10 +67,10 @@ namespace Quoridor
                     }
                 }
             
-            players = new Player[2];
+            Players = new Player[2];
 
-            players[0] = firstPlayer;
-            players[1] = secondPlayer;
+            Players[0] = firstPlayer;
+            Players[1] = secondPlayer;
 
             firstPlayer.Id = 0;
             secondPlayer.Id = 1;
@@ -77,18 +78,24 @@ namespace Quoridor
             firstPlayer.TargetY = 9;
             secondPlayer.TargetY = 1;
             
-            foreach (var player in players)
+            foreach (var player in Players)
             {
                 player.CurrentPosition = player.Id == 0 ? Board[5, 1] : Board[5, 9];
                 player.WallsRemaining = 10;
                 player.Game = this;
             }
 
-            wallsOnBoard = new HashSet<Wall>();
-            possibleWalls = GenerateAllPossibleWalls();
+            WallsOnBoard = new HashSet<Wall>();
+            PossibleWalls = GenerateAllPossibleWalls();
             
         }
 
+        public Wall[] GetWallsRejectedBy(Wall wall)
+        {
+            return wall.Get4IntersectedWalls().Where(intersectedWall => PossibleWalls.Contains(intersectedWall)).ToArray();
+        }
+
+        
 
         public override string ToString()
         {
@@ -120,14 +127,14 @@ namespace Quoridor
             
 
             // '0' for the first player and '1' for the second
-            foreach (var player in players)
+            foreach (var player in Players)
             {
                 table[Get_I_From_Y(player.CurrentPosition.Y), Get_J_From_X(player.CurrentPosition.X)] = player.Id.ToString()[0];
             }
 
-            foreach (var wall in wallsOnBoard)
+            foreach (var wall in WallsOnBoard)
             {
-                var upperLeftCell = wall.SegmentB.Cell1;
+                var upperLeftCell = wall.Cells[1];
                 if (wall.Orientation == Orientation.Vertical)
                 {
                     table[Get_I_From_Y(upperLeftCell.Y), Get_J_From_X(upperLeftCell.X) + 1] = 'W';
@@ -141,9 +148,6 @@ namespace Quoridor
                     table[Get_I_From_Y(upperLeftCell.Y) + 1, Get_J_From_X(upperLeftCell.X) + 2] = 'W';
                 }
             }
-
-
-
             
 
             var builder = new StringBuilder();

@@ -46,7 +46,11 @@
     <Compile Include="Game.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Human.cs" />
+    <Compile Include="Move.cs" />
+    <Compile Include="PawnMove.cs" />
+    <Compile Include="PlaceWallMove.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="Vector.cs" />
     <Compile Include="Wall.cs" />
     <Compile Include="WallSegment.cs" />
     <Compile Include="Cell.cs" />

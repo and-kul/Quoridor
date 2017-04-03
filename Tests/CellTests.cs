@@ -55,5 +55,19 @@ namespace Tests
 
             Assert.That(cells.SequenceEqual(sortedSample));
         }
+
+        [Test]
+        public void EqualityOperatorTest()
+        {
+            var c_2_3 = new Cell(2, 3);
+            var c_2_3_Copy = new Cell(2, 3);
+            var c_2_4 = new Cell(2, 4);
+
+            Assert.That(c_2_3 == c_2_3_Copy);
+
+            Assert.That(c_2_3 != c_2_4);
+        }
+
+
     }
 }
