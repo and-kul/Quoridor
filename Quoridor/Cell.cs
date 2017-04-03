@@ -8,13 +8,11 @@ namespace Quoridor
         public readonly int X;
         public readonly int Y;
 
-        public readonly List<Cell> Neighbors;
 
         public Cell(int x, int y)
         {
             X = x;
             Y = y;
-            Neighbors = new List<Cell>();
         }
         
 

@@ -9,6 +9,8 @@ namespace Quoridor
         public HashSet<Wall> wallsOnBoard;
         private HashSet<Wall> possibleWalls;
         private Player[] players;
+        public Dictionary<Cell, List<Cell>> Neighbors;
+
         
         private HashSet<Wall> GenerateAllPossibleWalls()
         {
@@ -37,6 +39,8 @@ namespace Quoridor
         {
             Board = new Cell[11, 11];
 
+            Neighbors = new Dictionary<Cell, List<Cell>>();
+
             for (var x = 1; x <= 9; ++x)
                 for (var y = 1; y <= 9; ++y)
                 {
@@ -50,12 +54,14 @@ namespace Quoridor
                 for (var y = 1; y <= 9; ++y)
                 {
                     var current = Board[x, y];
+                    Neighbors[current] = new List<Cell>();
+
                     for (var i = 0; i < 4; ++i)
                     {
                         var adjacent = Board[x + dx[i], y + dy[i]];
                         if (adjacent != null)
                         {
-                            current.Neighbors.Add(adjacent);
+                            Neighbors[current].Add(adjacent);
                         }
                     }
                 }
