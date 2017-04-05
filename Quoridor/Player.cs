@@ -70,10 +70,37 @@ namespace Quoridor
         }
 
 
-        public int GetCurrentDistanceToTargetSide()
+        public List<PlaceWallMove> GetPossiblePlaceWallMoves()
+        {
+            var result = new List<PlaceWallMove>();
+
+            if (WallsRemaining == 0)
+                return result;
+
+            foreach (var possibleWall in Game.PossibleWalls.ToArray())
+            {
+                var placePossibleWallMove = new PlaceWallMove(Game, this, possibleWall, Game.GetWallsRejectedBy(possibleWall));
+                placePossibleWallMove.Apply();
+
+                if (DoesPathExist() && Opponent.DoesPathExist())
+                    result.Add(placePossibleWallMove);
+
+                placePossibleWallMove.Rollback();
+            }
+
+            return result;
+        }
+
+        public bool DoesPathExist()
         {
             var aStar = new AStar(this);
+            return aStar.DoesPathExist();
+        }
 
+
+        public int GetShortestPathLength()
+        {
+            var aStar = new AStar(this);
             return aStar.GetShortestPathLength();
         }
     }

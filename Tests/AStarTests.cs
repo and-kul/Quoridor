@@ -35,7 +35,7 @@ namespace Tests
         [Test]
         public void InitialPosition()
         {
-            Assert.That(player1.GetCurrentDistanceToTargetSide(), Is.EqualTo(8));
+            Assert.That(player1.GetShortestPathLength(), Is.EqualTo(8));
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace Tests
             
             Console.WriteLine(game);
 
-            Assert.That(player1.GetCurrentDistanceToTargetSide(), Is.EqualTo(int.MaxValue));
+            Assert.That(player1.GetShortestPathLength(), Is.EqualTo(int.MaxValue));
         }
 
         [Test]
@@ -79,8 +79,8 @@ namespace Tests
 
             Console.WriteLine(game);
 
-            Assert.That(player1.GetCurrentDistanceToTargetSide(), Is.EqualTo(4));
-            Assert.That(player2.GetCurrentDistanceToTargetSide(), Is.EqualTo(4));
+            Assert.That(player1.GetShortestPathLength(), Is.EqualTo(4));
+            Assert.That(player2.GetShortestPathLength(), Is.EqualTo(4));
         }
 
         [Test]
@@ -101,10 +101,36 @@ namespace Tests
 
             Console.WriteLine(game);
 
-            Assert.That(player1.GetCurrentDistanceToTargetSide(), Is.EqualTo(9));
+            Assert.That(player1.GetShortestPathLength(), Is.EqualTo(9));
         }
 
+        [Test]
+        public void UsingAStarSeveralTimesForOnePlayer()
+        {
+            player1.CurrentPosition = c[5, 5];
 
+            var wallDescriptions = new[] { "55h", "44v", "65v", "77h", "46h" };
+
+            foreach (var wallDescription in wallDescriptions)
+            {
+                var wall = new Wall(wallDescription);
+                var rejectedWalls = game.GetWallsRejectedBy(wall);
+
+                var placeWallMove = new PlaceWallMove(game, player1, wall, rejectedWalls);
+                placeWallMove.Apply();
+            }
+
+            Console.WriteLine(game);
+
+            Assert.That(player1.GetShortestPathLength(), Is.EqualTo(9));
+
+            player1.CurrentPosition = c[5, 3];
+
+            Console.WriteLine(game);
+            Assert.That(player1.GetShortestPathLength(), Is.EqualTo(8));
+
+
+        }
 
     }
 }
