@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Quoridor
 {
@@ -21,17 +22,18 @@ namespace Quoridor
 
         public abstract Move CreateMove();
 
-        protected Player Opponent => Game.Players[Id ^ 1];
+        public Player Opponent => Game.Players[Id ^ 1];
 
-        public List<PawnMove> GetPossiblePawnMoves()
+
+        public List<Cell> GetPossibleCellsToMoveTo()
         {
-            var result = new List<PawnMove>();
+            var result = new List<Cell>();
 
             foreach (var neighbor in Game.Neighbors[CurrentPosition])
             {
                 if (neighbor != Opponent.CurrentPosition)
                 {
-                    result.Add(new PawnMove(Game, this, CurrentPosition, neighbor));
+                    result.Add(neighbor);
                 }
                 else
                 {
@@ -40,7 +42,7 @@ namespace Quoridor
 
                     if (Game.Neighbors[neighbor].Contains(behindOpponent))
                     {
-                        result.Add(new PawnMove(Game, this, CurrentPosition, behindOpponent));
+                        result.Add(behindOpponent);
                         continue;
                     }
 
@@ -48,11 +50,10 @@ namespace Quoridor
                     var toTheRightOfOpponent = neighbor + vector.TurnRight();
 
                     if (Game.Neighbors[neighbor].Contains(toTheLeftOfOpponent))
-                        result.Add(new PawnMove(Game, this, CurrentPosition, toTheLeftOfOpponent));
+                        result.Add(toTheLeftOfOpponent);
 
                     if (Game.Neighbors[neighbor].Contains(toTheRightOfOpponent))
-                        result.Add(new PawnMove(Game, this, CurrentPosition, toTheRightOfOpponent));
-                    
+                        result.Add(toTheRightOfOpponent);
                 }
             }
 
@@ -60,7 +61,20 @@ namespace Quoridor
         }
 
 
+        public List<PawnMove> GetPossiblePawnMoves()
+        {
+            return
+                GetPossibleCellsToMoveTo()
+                    .Select(possibleCell => new PawnMove(Game, this, CurrentPosition, possibleCell))
+                    .ToList();
+        }
 
 
+        public int GetCurrentDistanceToTargetSide()
+        {
+            var aStar = new AStar(this);
+
+            return aStar.GetShortestPathLength();
+        }
     }
 }
