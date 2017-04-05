@@ -14,7 +14,27 @@ namespace Quoridor
             X = x;
             Y = y;
         }
-        
+
+        public Cell(string cellDescription)
+        {
+            if (!IsCorrectCellDescription(cellDescription))
+                throw new ArgumentException("Incorrect cell description");
+
+            X = int.Parse(cellDescription.Substring(0, 1));
+            Y = int.Parse(cellDescription.Substring(1, 1));
+        }
+
+        public static bool IsCorrectCellDescription(string cellDescription)
+        {
+            if (cellDescription == null) return false;
+            if (cellDescription.Length != 2) return false;
+
+            if (cellDescription[0] < '1' || cellDescription[0] > '9') return false;
+            if (cellDescription[1] < '1' || cellDescription[1] > '9') return false;
+            
+            return true;
+        }
+
 
         public static bool AreAdjacent(Cell cell1, Cell cell2)
         {

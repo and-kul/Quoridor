@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -12,7 +13,30 @@ namespace Quoridor
         public Player[] Players;
         public Dictionary<Cell, List<Cell>> Neighbors;
 
-        
+        public Player Winner;
+
+        public void Play()
+        {
+            var currentPlayer = Players[0];
+
+            while (true)
+            {
+                var move = currentPlayer.CreateMove();
+                move.Apply();
+
+                if (currentPlayer.CurrentPosition.Y == currentPlayer.TargetY)
+                {
+                    Winner = currentPlayer;
+                    return;
+                }
+
+                currentPlayer = currentPlayer.Opponent;
+            }
+        }
+
+
+
+
         private HashSet<Wall> GenerateAllPossibleWalls()
         {
             var result = new HashSet<Wall>();

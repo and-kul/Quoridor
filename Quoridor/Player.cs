@@ -69,6 +69,26 @@ namespace Quoridor
                     .ToList();
         }
 
+        public List<Wall> GetPossibleWallsToPlace()
+        {
+            var result = new List<Wall>();
+            if (WallsRemaining == 0)
+                return result;
+
+            foreach (var possibleWall in Game.PossibleWalls.ToArray())
+            {
+                var placePossibleWallMove = new PlaceWallMove(Game, this, possibleWall, Game.GetWallsRejectedBy(possibleWall));
+                placePossibleWallMove.Apply();
+
+                if (DoesPathExist() && Opponent.DoesPathExist())
+                    result.Add(possibleWall);
+
+                placePossibleWallMove.Rollback();
+            }
+
+            return result;
+        }
+
 
         public List<PlaceWallMove> GetPossiblePlaceWallMoves()
         {
