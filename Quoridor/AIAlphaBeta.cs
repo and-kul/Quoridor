@@ -3,27 +3,26 @@ using System.Collections.Generic;
 
 namespace Quoridor
 {
-    public class AIMinMax : Player
+    public class AIAlphaBeta : Player
     {
         private readonly int maxDepth;
         private const int WinPoints = 10000;
 
-        public AIMinMax(string name, int maxDepth) : base(name)
+        public AIAlphaBeta(string name, int maxDepth) : base(name)
         {
-            if (maxDepth < 1)
-                throw new QuoridorException("maxDepth cannot be less than 1");
             this.maxDepth = maxDepth;
             bestMoves = new List<Move>();
         }
+
+        private readonly List<Move> bestMoves;
 
         private int Heuristic()
         {
             return Opponent.GetShortestPathLength() - GetShortestPathLength();
         }
 
-        private readonly List<Move> bestMoves;
-        
-        private int DFS(int depth)
+
+        private int DFS(int depth, int alpha, int beta)
         {
             if (depth == 0)
                 bestMoves.Clear();
@@ -41,19 +40,20 @@ namespace Quoridor
             // max for me
             if (depth % 2 == 0)
             {
-                int maxHeuristic = int.MinValue;
+                int maxResult = int.MinValue;
                 foreach (var myMove in GetAllPossibleMoves())
                 {
                     myMove.Apply();
 
-                    int moveResult = DFS(depth + 1);
+                    int moveResult = DFS(depth + 1, alpha, beta);
+                    alpha = Math.Max(alpha, moveResult);
 
-                    if (depth == 0 && moveResult == maxHeuristic)
+                    if (depth == 0 && moveResult == maxResult)
                         bestMoves.Add(myMove);
 
-                    if (moveResult > maxHeuristic)
+                    if (moveResult > maxResult)
                     {
-                        maxHeuristic = moveResult;
+                        maxResult = moveResult;
                         if (depth == 0)
                         {
                             bestMoves.Clear();
@@ -61,34 +61,39 @@ namespace Quoridor
                         }
                     }
                     myMove.Rollback();
+
+                    if (maxResult > beta)
+                        break;
                 }
-                return maxHeuristic;
+                return maxResult;
             }
             //min for opponent
             else
             {
-                int minHeuristic = int.MaxValue;
+                int minResult = int.MaxValue;
                 foreach (var opponentMove in Opponent.GetAllPossibleMoves())
                 {
                     opponentMove.Apply();
 
-                    int moveResult = DFS(depth + 1);
-                    
-                    if (moveResult < minHeuristic)
+                    int moveResult = DFS(depth + 1, alpha, beta);
+                    beta = Math.Min(beta, moveResult);
+
+                    if (moveResult < minResult)
                     {
-                        minHeuristic = moveResult;
+                        minResult = moveResult;
                     }
                     opponentMove.Rollback();
+
+                    if (minResult < alpha)
+                        break;
                 }
-                return minHeuristic;
+                return minResult;
             }
-
         }
-
-
+        
         public override Move CreateMove()
         {
-            DFS(0);
+            DFS(0, int.MinValue, int.MaxValue);
             return Helpers.PickRandomElement(bestMoves);
         }
     }
