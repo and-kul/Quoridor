@@ -13,7 +13,7 @@ namespace Quoridor
         static void Main(string[] args)
         {
             var player1 = new Human("Andrey");
-            var player2 = new Human("Zzz");
+            var player2 = new AIMinMax("AI_MinMax", 3);
 
             var game = new Game(player1, player2);
             game.Play();

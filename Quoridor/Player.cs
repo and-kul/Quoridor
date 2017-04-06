@@ -25,6 +25,15 @@ namespace Quoridor
         public Player Opponent => Game.Players[Id ^ 1];
 
 
+        public List<Move> GetAllPossibleMoves()
+        {
+            var result = new List<Move>();
+            result.AddRange(GetPossiblePawnMoves());
+            result.AddRange(GetPossiblePlaceWallMoves());
+
+            return result;
+        }
+
         public List<Cell> GetPossibleCellsToMoveTo()
         {
             var result = new List<Cell>();
