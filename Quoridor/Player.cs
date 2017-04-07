@@ -21,9 +21,12 @@ namespace Quoridor
         }
 
         public abstract Move CreateMove();
+        
 
         public Player Opponent => Game.Players[Id ^ 1];
 
+        public bool IsWinner => CurrentPosition.Y == TargetY;
+        public bool IsLoser => Opponent.CurrentPosition.Y == Opponent.TargetY;
 
         public List<Move> GetAllPossibleMoves()
         {

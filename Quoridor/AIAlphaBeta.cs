@@ -94,7 +94,7 @@ namespace Quoridor
         public override Move CreateMove()
         {
             DFS(0, int.MinValue, int.MaxValue);
-            return Helpers.PickRandomElement(bestMoves);
+            return Helper.PickRandomElement(bestMoves);
         }
     }
 }

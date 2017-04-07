@@ -3,7 +3,7 @@
     public abstract class Move
     {
         protected Game Game;
-        protected Player Player;
+        public Player Player;
         
         protected Move(Game game, Player player)
         {

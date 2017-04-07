@@ -44,10 +44,10 @@
   <ItemGroup>
     <Compile Include="AIAlphaBeta.cs" />
     <Compile Include="AIMinMax.cs" />
+    <Compile Include="AIMonteCarlo.cs" />
     <Compile Include="AStar.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="Helpers.cs" />
     <Compile Include="Human.cs" />
     <Compile Include="Move.cs" />
     <Compile Include="PawnMove.cs" />

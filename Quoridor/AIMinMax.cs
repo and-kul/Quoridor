@@ -16,6 +16,17 @@ namespace Quoridor
             bestMoves = new List<Move>();
         }
 
+        public AIMinMax(Player player, int maxDepth) : this(player.Name, maxDepth)
+        {
+            Id = player.Id;
+            TargetY = player.TargetY;
+            CurrentPosition = player.CurrentPosition;
+            WallsRemaining = player.WallsRemaining;
+            Game = player.Game;
+        }
+
+
+
         private int Heuristic()
         {
             return Opponent.GetShortestPathLength() - GetShortestPathLength();
@@ -89,7 +100,7 @@ namespace Quoridor
         public override Move CreateMove()
         {
             DFS(0);
-            return Helpers.PickRandomElement(bestMoves);
+            return Helper.PickRandomElement(bestMoves);
         }
     }
 }
